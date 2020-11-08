@@ -1,6 +1,7 @@
 import React from "react";
-import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
+import { Provider } from "react-redux";
+
 import productsReducer from "./store/reducers/products";
 
 const rootReducer = combineReducers({
