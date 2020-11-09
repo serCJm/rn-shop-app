@@ -1,5 +1,14 @@
 import React from "react";
-import { Button, Image, StyleSheet, Text, View } from "react-native";
+import {
+	Button,
+	Image,
+	StyleSheet,
+	Text,
+	View,
+	TouchableOpacity,
+	Platform,
+	TouchableNativeFeedback,
+} from "react-native";
 import { Colors } from "../../constants/Colots";
 
 interface Props {
@@ -11,30 +20,43 @@ interface Props {
 }
 
 const ProductItem = (props: Props) => {
+	let TouchableComp: any = TouchableOpacity;
+
+	if (Platform.OS === "android" && Platform.Version >= 21) {
+		TouchableComp = TouchableNativeFeedback;
+	}
 	return (
 		<View style={styles.product}>
-			<View style={styles.imageContainer}>
-				<Image
-					style={styles.image}
-					source={{ uri: props.image }}
-				></Image>
-			</View>
-			<View style={styles.details}>
-				<Text style={styles.title}>{props.title}</Text>
-				<Text style={styles.price}>${props.price.toFixed(2)}</Text>
-			</View>
+			<View style={styles.touchable}>
+				<TouchableComp onPress={props.onViewDetail} useForeground>
+					<View>
+						<View style={styles.imageContainer}>
+							<Image
+								style={styles.image}
+								source={{ uri: props.image }}
+							></Image>
+						</View>
+						<View style={styles.details}>
+							<Text style={styles.title}>{props.title}</Text>
+							<Text style={styles.price}>
+								${props.price.toFixed(2)}
+							</Text>
+						</View>
 
-			<View style={styles.actions}>
-				<Button
-					color={Colors.PRIMARY}
-					title="View Details"
-					onPress={props.onViewDetail}
-				></Button>
-				<Button
-					color={Colors.ACCENT}
-					title="To Cart"
-					onPress={props.onAddToCard}
-				></Button>
+						<View style={styles.actions}>
+							<Button
+								color={Colors.PRIMARY}
+								title="View Details"
+								onPress={props.onViewDetail}
+							></Button>
+							<Button
+								color={Colors.ACCENT}
+								title="To Cart"
+								onPress={props.onAddToCard}
+							></Button>
+						</View>
+					</View>
+				</TouchableComp>
 			</View>
 		</View>
 	);
@@ -56,6 +78,10 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		height: 300,
 		margin: 20,
+	},
+	touchable: {
+		overflow: "hidden",
+		borderRadius: 10,
 	},
 	imageContainer: {
 		width: "100%",
