@@ -11,9 +11,10 @@ import {
 	NavigationStackProp,
 	NavigationStackScreenComponent,
 } from "react-navigation-stack";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../App";
 import { Colors } from "../../constants/Colots";
+import * as cartActions from "../../store/actions/cart";
 
 interface Props {
 	navigation: NavigationStackProp;
@@ -24,6 +25,7 @@ const ProductDetailScreen: NavigationStackScreenComponent = (props: Props) => {
 	const selectedProduct = useSelector((state: RootState) =>
 		state.products.availableProducts.find((prod) => prod.id === productId)
 	);
+	const dispatch = useDispatch();
 	return (
 		<ScrollView>
 			<Image
@@ -34,7 +36,10 @@ const ProductDetailScreen: NavigationStackScreenComponent = (props: Props) => {
 				<Button
 					color={Colors.PRIMARY}
 					title="Add to Cart"
-					onPress={() => {}}
+					onPress={() => {
+						if (selectedProduct)
+							dispatch(cartActions.addToCart(selectedProduct));
+					}}
 				></Button>
 			</View>
 			<Text style={styles.price}>

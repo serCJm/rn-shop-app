@@ -1,0 +1,43 @@
+import PRODUCTS from "../../data/dummy-data";
+import CartItem from "../../models/cart-item";
+import { ADD_TO_CART, CartActionTypes, CartState } from "../types";
+
+const initialState: CartState = {
+	items: {},
+	totalAmount: 0,
+};
+
+export default (state = initialState, action: CartActionTypes): CartState => {
+	switch (action.type) {
+		case ADD_TO_CART:
+			const addedProduct = action.product;
+			const productPrice = addedProduct.price;
+			const productTitle = addedProduct.title;
+
+			let updatedOrNewCartItem;
+			if (state.items[addedProduct.id]) {
+				updatedOrNewCartItem = new CartItem(
+					state.items[addedProduct.id].quantity + 1,
+					productPrice,
+					productTitle,
+					state.items[addedProduct.id].sum + productPrice
+				);
+			} else {
+				updatedOrNewCartItem = new CartItem(
+					1,
+					productPrice,
+					productTitle,
+					productPrice
+				);
+			}
+			return {
+				...state,
+				items: {
+					...state.items,
+					[addedProduct.id]: updatedOrNewCartItem,
+				},
+				totalAmount: state.totalAmount + productPrice,
+			};
+	}
+	return state;
+};

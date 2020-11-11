@@ -3,11 +3,12 @@ import {
 	NavigationStackProp,
 	NavigationStackScreenComponent,
 } from "react-navigation-stack";
-import { FlatList, Text } from "react-native";
-import { useSelector } from "react-redux";
+import { FlatList } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../../App";
 import ProductItem from "../../components/shop/ProductItem";
+import * as cartActions from "../../store/actions/cart";
 
 interface Props {
 	navigation: NavigationStackProp;
@@ -19,6 +20,7 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = (
 	const products = useSelector(
 		(state: RootState) => state.products.availableProducts
 	);
+	const dispatch = useDispatch();
 
 	return (
 		<FlatList
@@ -34,7 +36,9 @@ const ProductsOverviewScreen: NavigationStackScreenComponent = (
 							productTitle: itemData.item.title,
 						});
 					}}
-					onAddToCard={() => {}}
+					onAddToCard={() =>
+						dispatch(cartActions.addToCart(itemData.item))
+					}
 				></ProductItem>
 			)}
 		></FlatList>
