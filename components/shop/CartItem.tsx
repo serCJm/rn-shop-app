@@ -32,7 +32,7 @@ const CartItem = (props: Props) => {
 						name={
 							Platform.OS === "android" ? "md-trash" : "ios-trash"
 						}
-						size={23}
+						size={27}
 						color="red"
 					></Ionicons>
 				</TouchableOpacity>
