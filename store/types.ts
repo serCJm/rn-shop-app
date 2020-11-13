@@ -1,10 +1,13 @@
 import CartItem from "../models/cart-item";
+import Order from "../models/order";
 import Product from "../models/product";
 
 export interface ProductsState {
 	availableProducts: Product[];
 	userProducts: Product[];
 }
+
+// CART TYPES
 
 export const ADD_TO_CART = "ADD_TO_CART";
 export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
@@ -27,3 +30,21 @@ interface RemoveFromCartAction {
 }
 
 export type CartActionTypes = AddToCartAction | RemoveFromCartAction;
+
+// ORDERS TYPES
+
+export const ADD_ORDER = "ADD_ORDER";
+
+export interface OrdrersState {
+	orders: Order[];
+}
+
+interface AddOrderAction {
+	type: typeof ADD_ORDER;
+	orderData: {
+		items: CartItem[];
+		amount: number;
+	};
+}
+
+export type OrderActionTypes = AddOrderAction;
