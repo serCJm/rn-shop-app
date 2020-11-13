@@ -7,6 +7,7 @@ export interface ProductsState {
 }
 
 export const ADD_TO_CART = "ADD_TO_CART";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
 
 export interface CartState {
 	items: {
@@ -20,9 +21,9 @@ interface AddToCartAction {
 	product: Product;
 }
 
-// interface ISetFilters {
-// 	type: typeof SET_FILTERS;
-// 	filters: IFilterSettings;
-// }
+interface RemoveFromCartAction {
+	type: typeof REMOVE_FROM_CART;
+	pid: string;
+}
 
-export type CartActionTypes = AddToCartAction;
+export type CartActionTypes = AddToCartAction | RemoveFromCartAction;
