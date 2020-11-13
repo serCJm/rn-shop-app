@@ -45,7 +45,8 @@ export default CartItem;
 
 const styles = StyleSheet.create({
 	cartItem: {
-		padding: 20,
+		// padding: 20,
+		paddingHorizontal: 10,
 		backgroundColor: "white",
 		flexDirection: "row",
 		justifyContent: "space-between",
@@ -67,5 +68,6 @@ const styles = StyleSheet.create({
 	},
 	deleteButton: {
 		marginLeft: 20,
+		padding: 20,
 	},
 });
