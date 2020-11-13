@@ -1,7 +1,9 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import { useSelector } from "react-redux";
 import { RootState } from "../../App";
+import CartItem from "../../components/shop/CartItem";
 import { Colors } from "../../constants/Colots";
 
 interface Props {}
@@ -39,9 +41,18 @@ const CartScreen = (props: Props) => {
 					onPress={() => {}}
 				/>
 			</View>
-			<View>
-				<Text>CART ITEMS</Text>
-			</View>
+			<FlatList
+				data={cartItems}
+				keyExtractor={(item) => item.productId}
+				renderItem={(itemData) => (
+					<CartItem
+						quantity={itemData.item.quantity}
+						title={itemData.item.productTitle}
+						amount={itemData.item.sum}
+						onRemove={() => {}}
+					></CartItem>
+				)}
+			></FlatList>
 		</View>
 	);
 };
