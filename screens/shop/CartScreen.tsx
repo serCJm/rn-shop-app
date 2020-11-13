@@ -6,6 +6,7 @@ import { RootState } from "../../App";
 import CartItem from "../../components/shop/CartItem";
 import { Colors } from "../../constants/Colots";
 import * as cartActions from "../../store/actions/cart";
+import * as ordersActions from "../../store/actions/orders";
 
 interface Props {}
 
@@ -42,7 +43,11 @@ const CartScreen = (props: Props) => {
 					color={Colors.ACCENT}
 					title="Order Now"
 					disabled={cartItems.length === 0}
-					onPress={() => {}}
+					onPress={() =>
+						dispatch(
+							ordersActions.addOrder(cartItems, cartTotalAmount)
+						)
+					}
 				/>
 			</View>
 			<FlatList
