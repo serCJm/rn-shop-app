@@ -1,14 +1,14 @@
 import Order from "../../models/order";
-import { ADD_ORDER, OrderActionTypes, OrdrersState } from "../types";
+import { ADD_ORDER, OrderActionTypes, OrdersState } from "../types";
 
-const initialState: OrdrersState = {
+const initialState: OrdersState = {
 	orders: [],
 };
 
 export default (
 	state = initialState,
 	action: OrderActionTypes
-): OrdrersState => {
+): OrdersState => {
 	switch (action.type) {
 		case ADD_ORDER:
 			const newOrder = new Order(
