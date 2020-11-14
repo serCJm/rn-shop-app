@@ -11,14 +11,22 @@ export interface ProductsState {
 
 export const ADD_ORDER = "ADD_ORDER";
 
-export interface OrdrersState {
+export interface OrdersState {
 	orders: Order[];
 }
+
+export type OrderItems = {
+	productId: string;
+	productTitle: string;
+	productPrice: number;
+	quantity: number;
+	sum: number;
+};
 
 interface AddOrderAction {
 	type: typeof ADD_ORDER;
 	orderData: {
-		items: CartItem[];
+		items: OrderItems[];
 		amount: number;
 	};
 }
