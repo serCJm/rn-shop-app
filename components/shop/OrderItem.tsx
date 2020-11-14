@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/Colots";
+import { OrderItems } from "../../store/types";
+import CartItem from "./CartItem";
 
 interface Props {
 	amount: number;
 	date: string;
+	items: OrderItems[];
 }
 
 const OrderItem = (props: Props) => {
+	const [showDetails, setShowDetails] = useState(false);
 	return (
 		<View style={styles.orderItem}>
 			<View style={styles.summary}>
@@ -19,9 +23,22 @@ const OrderItem = (props: Props) => {
 			<Button
 				// style={styles.button}
 				color={Colors.PRIMARY}
-				title="Show Details"
-				onPress={() => {}}
+				title={showDetails ? "Hide Details" : "Show Details"}
+				onPress={() => setShowDetails((prevState) => !prevState)}
 			></Button>
+			{showDetails && (
+				<View style={styles.detailItems}>
+					{props.items.map((cartItem) => (
+						<CartItem
+							key={cartItem.productId}
+							quantity={cartItem.quantity}
+							amount={cartItem.sum}
+							title={cartItem.productTitle}
+							deletable={false}
+						></CartItem>
+					))}
+				</View>
+			)}
 		</View>
 	);
 };
@@ -59,5 +76,9 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontFamily: "open-sans",
 		color: "#888",
+	},
+	detailItems: {
+		width: "100%",
+		marginTop: 25,
 	},
 });
