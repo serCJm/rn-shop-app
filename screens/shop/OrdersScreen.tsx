@@ -6,6 +6,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { NavigationStackScreenProps } from "react-navigation-stack";
 import { useSelector } from "react-redux";
 import { RootState } from "../../App";
+import OrderItem from "../../components/shop/OrderItem";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 
 interface Props {}
@@ -20,7 +21,12 @@ const OrdersScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		<FlatList
 			data={orders}
 			keyExtractor={(item) => item.id}
-			renderItem={(itemData) => <Text>{itemData.item.totalAmount}</Text>}
+			renderItem={(itemData) => (
+				<OrderItem
+					amount={itemData.item.totalAmount}
+					date={itemData.item.readableDate}
+				></OrderItem>
+			)}
 		></FlatList>
 	);
 };
