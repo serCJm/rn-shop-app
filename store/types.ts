@@ -7,6 +7,24 @@ export interface ProductsState {
 	userProducts: Product[];
 }
 
+// ORDERS TYPES
+
+export const ADD_ORDER = "ADD_ORDER";
+
+export interface OrdrersState {
+	orders: Order[];
+}
+
+interface AddOrderAction {
+	type: typeof ADD_ORDER;
+	orderData: {
+		items: CartItem[];
+		amount: number;
+	};
+}
+
+export type OrderActionTypes = AddOrderAction;
+
 // CART TYPES
 
 export const ADD_TO_CART = "ADD_TO_CART";
@@ -29,22 +47,7 @@ interface RemoveFromCartAction {
 	pid: string;
 }
 
-export type CartActionTypes = AddToCartAction | RemoveFromCartAction;
-
-// ORDERS TYPES
-
-export const ADD_ORDER = "ADD_ORDER";
-
-export interface OrdrersState {
-	orders: Order[];
-}
-
-interface AddOrderAction {
-	type: typeof ADD_ORDER;
-	orderData: {
-		items: CartItem[];
-		amount: number;
-	};
-}
-
-export type OrderActionTypes = AddOrderAction;
+export type CartActionTypes =
+	| AddToCartAction
+	| RemoveFromCartAction
+	| AddOrderAction;
