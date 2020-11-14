@@ -65,6 +65,7 @@ const CartScreen = (props: Props) => {
 								)
 							)
 						}
+						deletable
 					></CartItem>
 				)}
 			></FlatList>
