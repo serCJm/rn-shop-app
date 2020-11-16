@@ -1,11 +1,9 @@
 import React from "react";
 import {
-	NavigationStackOptions,
 	NavigationStackProp,
-	NavigationStackScreenComponent,
 	NavigationStackScreenProps,
 } from "react-navigation-stack";
-import { FlatList, Platform } from "react-native";
+import { Button, FlatList, Platform } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../../App";
@@ -15,6 +13,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { NavigationScreenComponent } from "react-navigation";
+import { Colors } from "../../constants/Colots";
 
 interface Props {
 	navigation: NavigationStackProp;
@@ -30,6 +29,13 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	);
 	const dispatch = useDispatch();
 
+	const selectItemHandler = (id: string, title: string) => {
+		props.navigation.navigate("ProductDetail", {
+			productId: id,
+			productTitle: title,
+		});
+	};
+
 	return (
 		<FlatList
 			data={products}
@@ -38,16 +44,28 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 					title={itemData.item.title}
 					image={itemData.item.imageUrl}
 					price={itemData.item.price}
-					onViewDetail={() => {
-						props.navigation.navigate("ProductDetail", {
-							productId: itemData.item.id,
-							productTitle: itemData.item.title,
-						});
-					}}
-					onAddToCard={() =>
-						dispatch(cartActions.addToCart(itemData.item))
+					onSelect={() =>
+						selectItemHandler(itemData.item.id, itemData.item.title)
 					}
-				></ProductItem>
+				>
+					<Button
+						color={Colors.PRIMARY}
+						title="View Details"
+						onPress={() =>
+							selectItemHandler(
+								itemData.item.id,
+								itemData.item.title
+							)
+						}
+					></Button>
+					<Button
+						color={Colors.ACCENT}
+						title="To Cart"
+						onPress={() =>
+							dispatch(cartActions.addToCart(itemData.item))
+						}
+					></Button>
+				</ProductItem>
 			)}
 		></FlatList>
 	);

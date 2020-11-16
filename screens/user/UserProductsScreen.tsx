@@ -1,5 +1,12 @@
 import React from "react";
-import { FlatList, Platform, StyleSheet, Text, View } from "react-native";
+import {
+	Button,
+	FlatList,
+	Platform,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -8,6 +15,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../App";
 import ProductItem from "../../components/shop/ProductItem";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
+import { Colors } from "../../constants/Colots";
 
 interface Props {}
 type Params = {};
@@ -28,9 +36,19 @@ const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
 					image={itemData.item.imageUrl}
 					title={itemData.item.title}
 					price={itemData.item.price}
-					onViewDetail={() => {}}
-					onAddToCard={() => {}}
-				></ProductItem>
+					onSelect={() => {}}
+				>
+					<Button
+						color={Colors.PRIMARY}
+						title="Edit"
+						onPress={() => {}}
+					></Button>
+					<Button
+						color={Colors.ACCENT}
+						title="Delete"
+						onPress={() => {}}
+					></Button>
+				</ProductItem>
 			)}
 		></FlatList>
 	);

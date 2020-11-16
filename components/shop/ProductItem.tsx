@@ -1,6 +1,5 @@
 import React from "react";
 import {
-	Button,
 	Image,
 	StyleSheet,
 	Text,
@@ -9,14 +8,13 @@ import {
 	Platform,
 	TouchableNativeFeedback,
 } from "react-native";
-import { Colors } from "../../constants/Colots";
 
 interface Props {
 	image: string;
 	title: string;
 	price: number;
-	onViewDetail: () => void;
-	onAddToCard: () => void;
+	onSelect: () => void;
+	children: React.ReactNode;
 }
 
 const ProductItem = (props: Props) => {
@@ -28,7 +26,7 @@ const ProductItem = (props: Props) => {
 	return (
 		<View style={styles.product}>
 			<View style={styles.touchable}>
-				<TouchableComp onPress={props.onViewDetail} useForeground>
+				<TouchableComp onPress={props.onSelect} useForeground>
 					<View>
 						<View style={styles.imageContainer}>
 							<Image
@@ -42,19 +40,7 @@ const ProductItem = (props: Props) => {
 								${props.price.toFixed(2)}
 							</Text>
 						</View>
-
-						<View style={styles.actions}>
-							<Button
-								color={Colors.PRIMARY}
-								title="View Details"
-								onPress={props.onViewDetail}
-							></Button>
-							<Button
-								color={Colors.ACCENT}
-								title="To Cart"
-								onPress={props.onAddToCard}
-							></Button>
-						</View>
+						<View style={styles.actions}>{props.children}</View>
 					</View>
 				</TouchableComp>
 			</View>
