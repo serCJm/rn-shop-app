@@ -36,7 +36,7 @@ const CartScreen = (props: Props) => {
 				<Text style={styles.summaryText}>
 					Total:{" "}
 					<Text style={styles.amount}>
-						${cartTotalAmount.toFixed(2)}
+						${Math.abs(+cartTotalAmount.toFixed(2))}
 					</Text>
 				</Text>
 				<Button
