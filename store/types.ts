@@ -2,10 +2,21 @@ import CartItem from "../models/cart-item";
 import Order from "../models/order";
 import Product from "../models/product";
 
+// PRODUCTS TYPES
+
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
+
 export interface ProductsState {
 	availableProducts: Product[];
 	userProducts: Product[];
 }
+
+interface DeleteProductAction {
+	type: typeof DELETE_PRODUCT;
+	pid: string;
+}
+
+export type ProductsActionTypes = DeleteProductAction;
 
 // ORDERS TYPES
 
