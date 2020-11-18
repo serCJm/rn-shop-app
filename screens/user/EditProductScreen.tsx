@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { NavigationScreenComponent } from "react-navigation";
@@ -36,6 +36,14 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	const [description, setDescription] = useState(
 		editedProduct ? editedProduct.description : ""
 	);
+
+	const submitHandler = useCallback(() => {
+		console.log("Submitting!");
+	}, []);
+
+	useEffect(() => {
+		props.navigation.setParams({ submit: submitHandler });
+	}, [submitHandler]);
 
 	return (
 		<ScrollView>
@@ -84,6 +92,7 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 type navOptions = NavigationStackScreenProps & NavigationDrawerScreenProps;
 
 EditProductScreen.navigationOptions = (navData: navOptions) => {
+	const submitFn = navData.navigation.getParam("submit");
 	return {
 		headerTitle: navData.navigation.getParam("productId")
 			? "Edit Product"
@@ -108,7 +117,7 @@ EditProductScreen.navigationOptions = (navData: navOptions) => {
 							? "md-checkmark"
 							: "ios-checkmark"
 					}
-					onPress={() => navData.navigation.navigate("Cart")}
+					onPress={submitFn}
 				></Item>
 			</HeaderButtons>
 		),
