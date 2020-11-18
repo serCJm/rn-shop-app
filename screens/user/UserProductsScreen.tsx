@@ -10,7 +10,10 @@ import {
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { NavigationStackScreenProps } from "react-navigation-stack";
+import {
+	NavigationStackProp,
+	NavigationStackScreenProps,
+} from "react-navigation-stack";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../App";
 import ProductItem from "../../components/shop/ProductItem";
@@ -18,7 +21,9 @@ import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import { Colors } from "../../constants/Colots";
 import * as productActions from "../../store/actions/products";
 
-interface Props {}
+interface Props {
+	navigation: NavigationStackProp;
+}
 type Params = {};
 type ScreenProps = {};
 
@@ -29,6 +34,9 @@ const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		(state: RootState) => state.products.userProducts
 	);
 	const dispatch = useDispatch();
+	const editProductHandler = (id: string) => {
+		props.navigation.navigate("EditProduct", { productId: id });
+	};
 	return (
 		<FlatList
 			data={userProducts}
@@ -38,12 +46,12 @@ const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
 					image={itemData.item.imageUrl}
 					title={itemData.item.title}
 					price={itemData.item.price}
-					onSelect={() => {}}
+					onSelect={() => editProductHandler(itemData.item.id)}
 				>
 					<Button
 						color={Colors.PRIMARY}
 						title="Edit"
-						onPress={() => {}}
+						onPress={() => editProductHandler(itemData.item.id)}
 					></Button>
 					<Button
 						color={Colors.ACCENT}
@@ -73,6 +81,17 @@ UserProductsScreen.navigationOptions = (navData: navOptions) => {
 						Platform.OS === "android" ? "md-menu" : "ios-cart"
 					}
 					onPress={() => navData.navigation.toggleDrawer()}
+				></Item>
+			</HeaderButtons>
+		),
+		headerRight: () => (
+			<HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+				<Item
+					title="Menu"
+					iconName={
+						Platform.OS === "android" ? "md-create" : "ios-create"
+					}
+					onPress={() => navData.navigation.navigate("EditProduct")}
 				></Item>
 			</HeaderButtons>
 		),
