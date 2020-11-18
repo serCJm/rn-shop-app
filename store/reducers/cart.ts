@@ -4,6 +4,8 @@ import {
 	ADD_TO_CART,
 	CartActionTypes,
 	CartState,
+	DELETE_PRODUCT,
+	ProductsActionTypes,
 	REMOVE_FROM_CART,
 } from "../types";
 
@@ -12,7 +14,10 @@ const initialState: CartState = {
 	totalAmount: 0,
 };
 
-export default (state = initialState, action: CartActionTypes): CartState => {
+export default (
+	state = initialState,
+	action: CartActionTypes | ProductsActionTypes
+): CartState => {
 	switch (action.type) {
 		case ADD_TO_CART:
 			const addedProduct = action.product;
@@ -71,6 +76,16 @@ export default (state = initialState, action: CartActionTypes): CartState => {
 			};
 		case ADD_ORDER:
 			return initialState;
+		case DELETE_PRODUCT:
+			if (!state.items[action.pid]) return state;
+			const updatedItems = { ...state.items };
+			const itemTotal = state.items[action.pid].sum;
+			delete updatedItems[action.pid];
+			return {
+				...state,
+				items: updatedItems,
+				totalAmount: state.totalAmount - itemTotal,
+			};
 	}
 	return state;
 };
