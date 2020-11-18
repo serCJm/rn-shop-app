@@ -11,11 +11,12 @@ import { NavigationScreenComponent } from "react-navigation";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { NavigationStackScreenProps } from "react-navigation-stack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../App";
 import ProductItem from "../../components/shop/ProductItem";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import { Colors } from "../../constants/Colots";
+import * as productActions from "../../store/actions/products";
 
 interface Props {}
 type Params = {};
@@ -27,6 +28,7 @@ const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	const userProducts = useSelector(
 		(state: RootState) => state.products.userProducts
 	);
+	const dispatch = useDispatch();
 	return (
 		<FlatList
 			data={userProducts}
@@ -46,7 +48,11 @@ const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
 					<Button
 						color={Colors.ACCENT}
 						title="Delete"
-						onPress={() => {}}
+						onPress={() =>
+							dispatch(
+								productActions.deleteProduct(itemData.item.id)
+							)
+						}
 					></Button>
 				</ProductItem>
 			)}
