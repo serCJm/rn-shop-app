@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Platform, StyleSheet, Text, View } from "react-native";
+import { Alert, Platform, StyleSheet, Text, View } from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
@@ -30,6 +30,7 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	const [title, setTitle] = useState(
 		editedProduct ? editedProduct.title : ""
 	);
+	const [titleIsValid, setTitleIsValid] = useState(false);
 	const [imageUrl, setImageUrl] = useState(
 		editedProduct ? editedProduct.imageUrl : ""
 	);
@@ -40,6 +41,12 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 
 	const dispatch = useDispatch();
 	const submitHandler = useCallback(() => {
+		if (!titleIsValid) {
+			Alert.alert("Wrong input!", "Plesae check the erros in the form", [
+				{ text: "OK" },
+			]);
+			return;
+		}
 		if (editedProduct) {
 			dispatch(
 				productActions.updateProduct(
@@ -66,6 +73,13 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		props.navigation.setParams({ submit: submitHandler });
 	}, [submitHandler]);
 
+	const titleChangeHandler = (text: string) => {
+		if (text.trim().length !== 0) {
+			setTitleIsValid(true);
+		}
+		setTitle(text);
+	};
+
 	return (
 		<ScrollView>
 			<View style={styles.form}>
@@ -74,10 +88,11 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 					<TextInput
 						style={styles.input}
 						value={title}
-						onChangeText={(text) => setTitle(text)}
+						onChangeText={titleChangeHandler}
 						autoCapitalize="words"
 						returnKeyType="next"
 					></TextInput>
+					{!titleIsValid && <Text>Please enter a valid title!</Text>}
 				</View>
 				<View style={styles.formControl}>
 					<Text style={styles.label}>Image URL</Text>
