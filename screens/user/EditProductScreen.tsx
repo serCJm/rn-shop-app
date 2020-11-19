@@ -59,6 +59,7 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 				)
 			);
 		}
+		props.navigation.goBack();
 	}, [dispatch, prodId, title, description, imageUrl, price]);
 
 	useEffect(() => {
