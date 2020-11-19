@@ -75,6 +75,8 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 						style={styles.input}
 						value={title}
 						onChangeText={(text) => setTitle(text)}
+						autoCapitalize="words"
+						returnKeyType="next"
 					></TextInput>
 				</View>
 				<View style={styles.formControl}>
@@ -93,6 +95,7 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 							style={styles.input}
 							value={price}
 							onChangeText={(text) => setPrice(text)}
+							keyboardType="decimal-pad"
 						></TextInput>
 					</View>
 				)}
