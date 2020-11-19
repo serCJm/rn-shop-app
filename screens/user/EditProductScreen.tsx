@@ -8,9 +8,10 @@ import {
 	NavigationStackProp,
 	NavigationStackScreenProps,
 } from "react-navigation-stack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../App";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
+import * as productActions from "../../store/actions/products";
 
 interface Props {
 	navigation: NavigationStackProp;
@@ -37,9 +38,28 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		editedProduct ? editedProduct.description : ""
 	);
 
+	const dispatch = useDispatch();
 	const submitHandler = useCallback(() => {
-		console.log("Submitting!");
-	}, []);
+		if (editedProduct) {
+			dispatch(
+				productActions.updateProduct(
+					prodId,
+					title,
+					description,
+					imageUrl
+				)
+			);
+		} else {
+			dispatch(
+				productActions.createProduct(
+					title,
+					description,
+					imageUrl,
+					+price
+				)
+			);
+		}
+	}, [dispatch, prodId, title, description, imageUrl, price]);
 
 	useEffect(() => {
 		props.navigation.setParams({ submit: submitHandler });
