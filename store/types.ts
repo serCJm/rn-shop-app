@@ -18,7 +18,7 @@ interface DeleteProductAction {
 	pid: string;
 }
 
-interface CreateProductActon {
+interface CreateProductAction {
 	type: typeof CREATE_PRODUCT;
 	productData: {
 		title: string;
@@ -40,7 +40,7 @@ interface UpdateProductAction {
 
 export type ProductsActionTypes =
 	| DeleteProductAction
-	| CreateProductActon
+	| CreateProductAction
 	| UpdateProductAction;
 
 // ORDERS TYPES
