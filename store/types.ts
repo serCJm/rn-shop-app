@@ -5,6 +5,8 @@ import Product from "../models/product";
 // PRODUCTS TYPES
 
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const CREATE_PRODUCT = "CREATE_PRODUCT";
+export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 
 export interface ProductsState {
 	availableProducts: Product[];
@@ -16,7 +18,30 @@ interface DeleteProductAction {
 	pid: string;
 }
 
-export type ProductsActionTypes = DeleteProductAction;
+interface CreateProductActon {
+	type: typeof CREATE_PRODUCT;
+	productData: {
+		title: string;
+		description: string;
+		imageUrl: string;
+		price: number;
+	};
+}
+
+interface UpdateProductAction {
+	type: typeof UPDATE_PRODUCT;
+	pid: string;
+	productData: {
+		title: string;
+		description: string;
+		imageUrl: string;
+	};
+}
+
+export type ProductsActionTypes =
+	| DeleteProductAction
+	| CreateProductActon
+	| UpdateProductAction;
 
 // ORDERS TYPES
 
