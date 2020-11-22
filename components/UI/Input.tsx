@@ -124,7 +124,9 @@ const Input = (props: Props) => {
 				onBlur={lostFocusHandler}
 			></TextInput>
 			{inputState.touched && !inputState.isValid && (
-				<Text>{props.errorText}</Text>
+				<View style={styles.errorContainer}>
+					<Text style={styles.errorText}>{props.errorText}</Text>
+				</View>
 			)}
 		</View>
 	);
@@ -145,5 +147,13 @@ const styles = StyleSheet.create({
 		paddingVertical: 5,
 		borderBottomColor: "#ccc",
 		borderBottomWidth: 1,
+	},
+	errorContainer: {
+		marginVertical: 5,
+	},
+	errorText: {
+		fontFamily: "open-sans",
+		color: "red",
+		fontSize: 14,
 	},
 });
