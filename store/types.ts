@@ -21,6 +21,7 @@ interface DeleteProductAction {
 interface CreateProductAction {
 	type: typeof CREATE_PRODUCT;
 	productData: {
+		id: string;
 		title: string;
 		description: string;
 		imageUrl: string;

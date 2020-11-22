@@ -1,3 +1,5 @@
+import { ThunkAction } from "redux-thunk";
+import { RootState } from "../../App";
 import {
 	CREATE_PRODUCT,
 	DELETE_PRODUCT,
@@ -14,15 +16,41 @@ export const createProduct = (
 	description: string,
 	imageUrl: string,
 	price: number
-): ProductsActionTypes => {
-	return {
-		type: CREATE_PRODUCT,
-		productData: {
-			title,
-			description,
-			imageUrl,
-			price,
-		},
+): ThunkAction<void, RootState, unknown, ProductsActionTypes> => {
+	return async (dispatch) => {
+		let respData;
+		try {
+			const resp = await fetch(
+				"https://rn-shop-app-57f83.firebaseio.com/products.json",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						title,
+						description,
+						imageUrl,
+						price,
+					}),
+				}
+			);
+			respData = await resp.json();
+		} catch (e) {
+			console.log(e);
+		}
+
+		if (respData)
+			dispatch({
+				type: CREATE_PRODUCT,
+				productData: {
+					id: respData.name,
+					title,
+					description,
+					imageUrl,
+					price,
+				},
+			});
 	};
 };
 
