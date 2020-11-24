@@ -16,32 +16,36 @@ export const fetchProducts = (): ThunkAction<
 	unknown,
 	ProductsActionTypes
 > => async (dispatch) => {
-	let respData;
 	try {
 		const resp = await fetch(
 			"https://rn-shop-app-57f83.firebaseio.com/products.json"
 		);
-		respData = await resp.json();
-	} catch (e) {
-		console.log(e);
-	}
 
-	let loadedProducts = [];
-	if (respData) {
-		for (const key in respData) {
-			loadedProducts.push(
-				new Product(
-					key,
-					"u1",
-					respData[key].title,
-					respData[key].imageUrl,
-					respData[key].description,
-					respData[key].price
-				)
-			);
+		if (!resp.ok) {
+			throw new Error("Something went wrong!");
 		}
+		const respData = await resp.json();
+
+		const loadedProducts = [];
+		if (respData) {
+			for (const key in respData) {
+				loadedProducts.push(
+					new Product(
+						key,
+						"u1",
+						respData[key].title,
+						respData[key].imageUrl,
+						respData[key].description,
+						respData[key].price
+					)
+				);
+			}
+		}
+		return dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+	} catch (err) {
+		// send to custom analytics server
+		throw err;
 	}
-	return dispatch({ type: SET_PRODUCTS, products: loadedProducts });
 };
 
 export const deleteProduct = (productId: string): ProductsActionTypes => {
