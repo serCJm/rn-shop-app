@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
+	ScrollView,
 	Alert,
 	KeyboardAvoidingView,
 	Platform,
 	StyleSheet,
-	Text,
 	View,
+	ActivityIndicator,
 } from "react-native";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../App";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import Input from "../../components/UI/Input";
+import { Colors } from "../../constants/Colots";
 import * as productActions from "../../store/actions/products";
 
 interface Props {
@@ -77,7 +78,7 @@ const formReducer = (
 			[action.input]: action.isValid,
 		};
 		let formIsValid = true;
-		for (let val of Object.values(updatedValidities)) {
+		for (const val of Object.values(updatedValidities)) {
 			formIsValid = formIsValid && val;
 		}
 		return {
@@ -92,6 +93,8 @@ const formReducer = (
 const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	props: Props
 ) => {
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState();
 	const prodId = props.navigation.getParam("productId");
 
 	const editedProduct = useSelector((state: RootState) =>
@@ -116,7 +119,13 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		formIsValid: editedProduct ? true : false,
 	});
 
-	const submitHandler = useCallback(() => {
+	useEffect(() => {
+		if (error) {
+			Alert.alert("An error occured!", error, [{ text: "OK" }]);
+		}
+	}, [error]);
+
+	const submitHandler = useCallback(async () => {
 		if (!formState.formIsValid) {
 			Alert.alert("Wrong input!", "Please check the errors in the form", [
 				{ text: "OK" },
@@ -124,26 +133,32 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 			return;
 		}
 		const { title, description, imageUrl, price } = formState.inputValues;
-		if (editedProduct) {
-			dispatch(
-				productActions.updateProduct(
-					prodId,
-					title,
-					description,
-					imageUrl
-				)
-			);
-		} else {
-			dispatch(
-				productActions.createProduct(
-					title,
-					description,
-					imageUrl,
-					+price
-				)
-			);
+		setIsLoading(true);
+		try {
+			if (editedProduct) {
+				await dispatch(
+					productActions.updateProduct(
+						prodId,
+						title,
+						description,
+						imageUrl
+					)
+				);
+			} else {
+				await dispatch(
+					productActions.createProduct(
+						title,
+						description,
+						imageUrl,
+						+price
+					)
+				);
+			}
+			props.navigation.goBack();
+		} catch (err) {
+			setError(err.message);
 		}
-		props.navigation.goBack();
+		setIsLoading(false);
 	}, [dispatch, prodId, formState]);
 
 	useEffect(() => {
@@ -156,6 +171,10 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 			inputValue: string,
 			inputValidity: boolean
 		) => {
+			// note, will run after leave focus
+			// so won't update state if trying to save
+			// before triggering finishing input
+			// will need to change
 			dispatchFormState({
 				type: FormReducerActions.REDUCER_UPDATE,
 				value: inputValue,
@@ -165,6 +184,17 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		},
 		[dispatchFormState]
 	);
+
+	if (isLoading) {
+		return (
+			<View style={styles.centered}>
+				<ActivityIndicator
+					size="large"
+					color={Colors.PRIMARY}
+				></ActivityIndicator>
+			</View>
+		);
+	}
 
 	return (
 		<KeyboardAvoidingView
@@ -271,5 +301,10 @@ export default EditProductScreen;
 const styles = StyleSheet.create({
 	form: {
 		margin: 20,
+	},
+	centered: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });

@@ -59,11 +59,14 @@ export const deleteProduct = (
 					method: "DELETE",
 				}
 			);
+			console.log(resp);
 			if (resp.ok) {
 				return dispatch({
 					type: DELETE_PRODUCT,
 					pid: productId,
 				});
+			} else {
+				throw new Error("Something went wrong with delete!");
 			}
 		} catch (err) {
 			throw err;
@@ -123,7 +126,7 @@ export const updateProduct = (
 	return async (dispatch) => {
 		try {
 			const resp = await fetch(
-				`https://rn-shop-app-57f83.firebaseio.com/products/${id}.json`,
+				`https://rn-shop-app-57f83.firebaseio.com/products/${id}.jsn`,
 				{
 					method: "PATCH",
 					headers: {
@@ -146,6 +149,8 @@ export const updateProduct = (
 						imageUrl,
 					},
 				});
+			} else {
+				throw new Error("Something went wrong!");
 			}
 		} catch (err) {
 			throw err;
