@@ -48,8 +48,27 @@ export const fetchProducts = (): ThunkAction<
 	}
 };
 
-export const deleteProduct = (productId: string): ProductsActionTypes => {
-	return { type: DELETE_PRODUCT, pid: productId };
+export const deleteProduct = (
+	productId: string
+): ThunkAction<void, RootState, unknown, ProductsActionTypes> => {
+	return async (dispatch) => {
+		try {
+			const resp = await fetch(
+				`https://rn-shop-app-57f83.firebaseio.com/products/${productId}.json`,
+				{
+					method: "DELETE",
+				}
+			);
+			if (resp.ok) {
+				return dispatch({
+					type: DELETE_PRODUCT,
+					pid: productId,
+				});
+			}
+		} catch (err) {
+			throw err;
+		}
+	};
 };
 
 export const createProduct = (
@@ -100,14 +119,36 @@ export const updateProduct = (
 	title: string,
 	description: string,
 	imageUrl: string
-): ProductsActionTypes => {
-	return {
-		type: UPDATE_PRODUCT,
-		pid: id,
-		productData: {
-			title,
-			description,
-			imageUrl,
-		},
+): ThunkAction<void, RootState, unknown, ProductsActionTypes> => {
+	return async (dispatch) => {
+		try {
+			const resp = await fetch(
+				`https://rn-shop-app-57f83.firebaseio.com/products/${id}.json`,
+				{
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						title,
+						description,
+						imageUrl,
+					}),
+				}
+			);
+			if (resp.ok) {
+				return dispatch({
+					type: UPDATE_PRODUCT,
+					pid: id,
+					productData: {
+						title,
+						description,
+						imageUrl,
+					},
+				});
+			}
+		} catch (err) {
+			throw err;
+		}
 	};
 };
