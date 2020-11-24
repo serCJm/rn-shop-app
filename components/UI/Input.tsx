@@ -120,7 +120,7 @@ const Input = (props: Props) => {
 				{...props}
 				style={styles.input}
 				value={inputState.value}
-				onChangeText={(text) => textChangeHandler(text)}
+				onChangeText={textChangeHandler}
 				onBlur={lostFocusHandler}
 			></TextInput>
 			{inputState.touched && !inputState.isValid && (
