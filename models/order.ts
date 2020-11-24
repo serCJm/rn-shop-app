@@ -6,7 +6,7 @@ export default class Order {
 		public id: string,
 		public items: OrderItems[],
 		public totalAmount: number,
-		public date: Date
+		public date: string
 	) {
 		this.id = id;
 		this.items = items;

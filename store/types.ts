@@ -70,8 +70,10 @@ export type OrderItems = {
 interface AddOrderAction {
 	type: typeof ADD_ORDER;
 	orderData: {
+		id: string;
 		items: OrderItems[];
 		amount: number;
+		date: string;
 	};
 }
 
