@@ -53,6 +53,7 @@ export type ProductsActionTypes =
 
 // ORDERS TYPES
 
+export const SET_ORDERS = "SET_ORDERS";
 export const ADD_ORDER = "ADD_ORDER";
 
 export interface OrdersState {
@@ -67,6 +68,11 @@ export type OrderItems = {
 	sum: number;
 };
 
+interface SetOrderAction {
+	type: typeof SET_ORDERS;
+	orders: Order[];
+}
+
 interface AddOrderAction {
 	type: typeof ADD_ORDER;
 	orderData: {
@@ -77,7 +83,7 @@ interface AddOrderAction {
 	};
 }
 
-export type OrderActionTypes = AddOrderAction;
+export type OrderActionTypes = AddOrderAction | SetOrderAction;
 
 // CART TYPES
 
