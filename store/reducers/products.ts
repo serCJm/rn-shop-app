@@ -1,3 +1,4 @@
+import { ActionSheetIOS } from "react-native";
 import PRODUCTS from "../../data/dummy-data";
 import Product from "../../models/product";
 import {
@@ -5,6 +6,7 @@ import {
 	DELETE_PRODUCT,
 	ProductsActionTypes,
 	ProductsState,
+	SET_PRODUCTS,
 	UPDATE_PRODUCT,
 } from "../types";
 
@@ -18,6 +20,14 @@ export default (
 	action: ProductsActionTypes
 ): ProductsState => {
 	switch (action.type) {
+		case SET_PRODUCTS:
+			return {
+				...state,
+				availableProducts: action.products,
+				userProducts: action.products.filter(
+					(prod) => prod.ownerId === "u1"
+				),
+			};
 		case CREATE_PRODUCT:
 			const newProduct = new Product(
 				action.productData.id,

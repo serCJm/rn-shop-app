@@ -4,6 +4,7 @@ import Product from "../models/product";
 
 // PRODUCTS TYPES
 
+export const SET_PRODUCTS = "SET_PRODUCTS";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
@@ -11,6 +12,11 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export interface ProductsState {
 	availableProducts: Product[];
 	userProducts: Product[];
+}
+
+interface SetProductsAction {
+	type: typeof SET_PRODUCTS;
+	products: Product[];
 }
 
 interface DeleteProductAction {
@@ -40,6 +46,7 @@ interface UpdateProductAction {
 }
 
 export type ProductsActionTypes =
+	| SetProductsAction
 	| DeleteProductAction
 	| CreateProductAction
 	| UpdateProductAction;

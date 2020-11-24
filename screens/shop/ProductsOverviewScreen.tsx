@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
 	NavigationStackProp,
 	NavigationStackScreenProps,
@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../App";
 import ProductItem from "../../components/shop/ProductItem";
 import * as cartActions from "../../store/actions/cart";
+import * as productActions from "../../store/actions/products";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
@@ -28,6 +29,10 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		(state: RootState) => state.products.availableProducts
 	);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(productActions.fetchProducts());
+	}, [dispatch]);
 
 	const selectItemHandler = (id: string, title: string) => {
 		props.navigation.navigate("ProductDetail", {
