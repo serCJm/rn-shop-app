@@ -34,6 +34,8 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	props: Props
 ) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [isRefreshing, setIsRefreshing] = useState(false);
+
 	const [error, setError] = useState();
 	const products = useSelector(
 		(state: RootState) => state.products.availableProducts
@@ -42,13 +44,13 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 
 	const loadProducts = useCallback(async () => {
 		setError(undefined);
-		setIsLoading(true);
+		setIsRefreshing(true);
 		try {
 			await dispatch(productActions.fetchProducts());
 		} catch (err) {
 			setError(err.message);
 		}
-		setIsLoading(false);
+		setIsRefreshing(false);
 	}, [dispatch, setIsLoading, setError, setIsLoading]);
 
 	useEffect(() => {
@@ -62,7 +64,13 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	}, [loadProducts]);
 
 	useEffect(() => {
-		loadProducts();
+		const fetchProducts = async () => {
+			setIsLoading(true);
+
+			await loadProducts();
+			setIsLoading(false);
+		};
+		fetchProducts();
 	}, [loadProducts]);
 
 	const selectItemHandler = (id: string, title: string) => {
@@ -106,6 +114,8 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 
 	return (
 		<FlatList
+			onRefresh={loadProducts}
+			refreshing={isRefreshing}
 			data={products}
 			renderItem={(itemData) => (
 				<ProductItem
