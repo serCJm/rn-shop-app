@@ -9,7 +9,7 @@ import {
 import { InputUpdateIds } from "../../screens/user/EditProductScreen";
 
 interface Props extends TextInputProps {
-	id: InputUpdateIds;
+	id: string;
 	label: string;
 	errorText: string;
 	initialValue: string;
@@ -20,7 +20,7 @@ interface Props extends TextInputProps {
 	max?: number;
 	minLength?: number;
 	onInputChange: (
-		inputIdentifier: InputUpdateIds,
+		inputIdentifier: string,
 		value: string,
 		isValid: boolean
 	) => void;
