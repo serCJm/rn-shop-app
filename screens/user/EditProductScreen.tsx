@@ -43,7 +43,7 @@ interface IUpdateFormReducer {
 	type: typeof FormReducerActions.REDUCER_UPDATE;
 	value: string;
 	isValid: boolean;
-	input: InputUpdateIds;
+	input: string;
 }
 
 type FormReducerActionTypes = IUpdateFormReducer;
@@ -167,7 +167,7 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 
 	const inputChangeHandler = useCallback(
 		(
-			inputIdentifier: InputUpdateIds,
+			inputIdentifier: string,
 			inputValue: string,
 			inputValidity: boolean
 		) => {
