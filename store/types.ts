@@ -111,3 +111,13 @@ export type CartActionTypes =
 	| AddToCartAction
 	| RemoveFromCartAction
 	| AddOrderAction;
+
+// AUTH
+
+export const SIGNUP = "SIGNUP";
+
+interface SignUpAction {
+	type: typeof SIGNUP;
+}
+
+export type SignUpActionTypes = SignUpAction;
