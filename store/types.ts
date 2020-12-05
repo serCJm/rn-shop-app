@@ -115,9 +115,13 @@ export type CartActionTypes =
 // AUTH
 
 export const SIGNUP = "SIGNUP";
+export const LOGIN = "LOGIN";
 
 interface SignUpAction {
 	type: typeof SIGNUP;
 }
+interface LoginAction {
+	type: typeof LOGIN;
+}
 
-export type SignUpActionTypes = SignUpAction;
+export type SignUpActionTypes = SignUpAction | LoginAction;
