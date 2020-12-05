@@ -116,10 +116,11 @@ const AuthScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		}
 		try {
 			await dispatch(action);
+			props.navigation.navigate("Shop");
 		} catch (e) {
 			setError(e.message);
+			setIsLoading(false);
 		}
-		setIsLoading(false);
 	};
 
 	const inputChangeHandler = useCallback(
