@@ -8,10 +8,12 @@ export const fetchOrders = (): ThunkAction<
 	RootState,
 	unknown,
 	OrderActionTypes
-> => async (dispatch) => {
+> => async (dispatch, getState) => {
 	try {
 		const resp = await fetch(
-			"https://rn-shop-app-57f83.firebaseio.com/orders/u1.json"
+			`https://rn-shop-app-57f83.firebaseio.com/orders/${
+				getState().auth.userId
+			}.json`
 		);
 
 		if (!resp.ok) {
@@ -43,12 +45,15 @@ export const addOrder = (
 	cartItems: OrderItems[],
 	totalAmount: number
 ): ThunkAction<void, RootState, unknown, OrderActionTypes> => async (
-	dispatch
+	dispatch,
+	getState
 ) => {
 	try {
 		const date = new Date().toISOString();
 		const resp = await fetch(
-			"https://rn-shop-app-57f83.firebaseio.com/orders/u1.json",
+			`https://rn-shop-app-57f83.firebaseio.com/orders/${
+				getState().auth.userId
+			}.json?auth=${getState().auth.token}`,
 			{
 				method: "POST",
 				headers: {

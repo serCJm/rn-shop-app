@@ -17,6 +17,7 @@ export interface ProductsState {
 interface SetProductsAction {
 	type: typeof SET_PRODUCTS;
 	products: Product[];
+	userProducts: Product[];
 }
 
 interface DeleteProductAction {
@@ -32,6 +33,7 @@ interface CreateProductAction {
 		description: string;
 		imageUrl: string;
 		price: number;
+		ownerId: string;
 	};
 }
 
@@ -117,11 +119,20 @@ export type CartActionTypes =
 export const SIGNUP = "SIGNUP";
 export const LOGIN = "LOGIN";
 
+export interface AuthState {
+	token: string;
+	userId: string;
+}
+
 interface SignUpAction {
 	type: typeof SIGNUP;
+	token: string;
+	userId: string;
 }
 interface LoginAction {
 	type: typeof LOGIN;
+	token: string;
+	userId: string;
 }
 
-export type SignUpActionTypes = SignUpAction | LoginAction;
+export type AuthActionTypes = SignUpAction | LoginAction;

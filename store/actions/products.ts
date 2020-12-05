@@ -15,7 +15,7 @@ export const fetchProducts = (): ThunkAction<
 	RootState,
 	unknown,
 	ProductsActionTypes
-> => async (dispatch) => {
+> => async (dispatch, getState) => {
 	try {
 		const resp = await fetch(
 			"https://rn-shop-app-57f83.firebaseio.com/products.json"
@@ -41,7 +41,7 @@ export const fetchProducts = (): ThunkAction<
 				);
 			}
 		}
-		return dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+		return dispatch({ type: SET_PRODUCTS, products: loadedProducts, userProducts: loadedProducts.filter(prod => prod.ownerId === getState().auth.userId) });
 	} catch (err) {
 		// send to custom analytics server
 		throw err;
@@ -51,10 +51,12 @@ export const fetchProducts = (): ThunkAction<
 export const deleteProduct = (
 	productId: string
 ): ThunkAction<void, RootState, unknown, ProductsActionTypes> => {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		try {
 			const resp = await fetch(
-				`https://rn-shop-app-57f83.firebaseio.com/products/${productId}.json`,
+				`https://rn-shop-app-57f83.firebaseio.com/products/${productId}.json?auth=${
+					getState().auth.token
+				}`,
 				{
 					method: "DELETE",
 				}
@@ -80,11 +82,13 @@ export const createProduct = (
 	imageUrl: string,
 	price: number
 ): ThunkAction<void, RootState, unknown, ProductsActionTypes> => {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		let respData;
 		try {
 			const resp = await fetch(
-				"https://rn-shop-app-57f83.firebaseio.com/products.json",
+				`https://rn-shop-app-57f83.firebaseio.com/products.json?auth=${
+					getState().auth.token
+				}`,
 				{
 					method: "POST",
 					headers: {
@@ -95,6 +99,7 @@ export const createProduct = (
 						description,
 						imageUrl,
 						price,
+						ownerId: getState().auth.userId,
 					}),
 				}
 			);
@@ -112,6 +117,7 @@ export const createProduct = (
 					description,
 					imageUrl,
 					price,
+					ownerId: getState().auth.userId,
 				},
 			});
 	};
@@ -123,10 +129,12 @@ export const updateProduct = (
 	description: string,
 	imageUrl: string
 ): ThunkAction<void, RootState, unknown, ProductsActionTypes> => {
-	return async (dispatch) => {
+	return async (dispatch, getState) => {
 		try {
 			const resp = await fetch(
-				`https://rn-shop-app-57f83.firebaseio.com/products/${id}.jsn`,
+				`https://rn-shop-app-57f83.firebaseio.com/products/${id}.json?auth=${
+					getState().auth.token
+				}`,
 				{
 					method: "PATCH",
 					headers: {
