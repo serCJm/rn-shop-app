@@ -1,8 +1,16 @@
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../App";
-import { LOGIN, SIGNUP, AuthActionTypes } from "../types";
+import { LOGIN, SIGNUP, AuthActionTypes, AUTHENTICATE } from "../types";
 // @ts-ignore
 import { FIREBASE_API } from "@env";
+import { AsyncStorage } from "react-native";
+
+export const authenticate = (
+	userId: string,
+	token: string
+): AuthActionTypes => {
+	return { type: AUTHENTICATE, userId, token };
+};
 
 export const signup = (
 	email: string,
@@ -35,6 +43,14 @@ export const signup = (
 				throw new Error(message);
 			}
 			const respData = await response.json();
+			const expirationDate = new Date(
+				new Date().getTime() + +respData.expiresIn * 1000
+			);
+			saveDataToStorage(
+				respData.idToken,
+				respData.localId,
+				expirationDate
+			);
 			return dispatch({
 				type: SIGNUP,
 				token: respData.idToken,
@@ -53,7 +69,7 @@ export const login = (
 	return async (dispatch) => {
 		try {
 			const response = await fetch(
-				`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${FIREBASE_API}`,
+				`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API}`,
 				{
 					method: "POST",
 					headers: {
@@ -81,6 +97,14 @@ export const login = (
 				throw new Error(message);
 			}
 			const respData = await response.json();
+			const expirationDate = new Date(
+				new Date().getTime() + +respData.expiresIn * 1000
+			);
+			saveDataToStorage(
+				respData.idToken,
+				respData.localId,
+				expirationDate
+			);
 			return dispatch({
 				type: LOGIN,
 				token: respData.idToken,
@@ -90,4 +114,19 @@ export const login = (
 			throw new Error(e.message || "Something is wrong!");
 		}
 	};
+};
+
+const saveDataToStorage = (
+	token: string,
+	userId: string,
+	expirationDate: Date
+) => {
+	AsyncStorage.setItem(
+		"userDate",
+		JSON.stringify({
+			token,
+			userId,
+			expiryDate: expirationDate.toISOString(),
+		})
+	);
 };

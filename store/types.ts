@@ -115,7 +115,7 @@ export type CartActionTypes =
 	| AddOrderAction;
 
 // AUTH
-
+export const AUTHENTICATE = "AUTHENTICATE";
 export const SIGNUP = "SIGNUP";
 export const LOGIN = "LOGIN";
 
@@ -124,6 +124,11 @@ export interface AuthState {
 	userId: string;
 }
 
+interface AuthenticateAction {
+	type: typeof AUTHENTICATE;
+	token: string;
+	userId: string;
+}
 interface SignUpAction {
 	type: typeof SIGNUP;
 	token: string;
@@ -135,4 +140,4 @@ interface LoginAction {
 	userId: string;
 }
 
-export type AuthActionTypes = SignUpAction | LoginAction;
+export type AuthActionTypes = SignUpAction | LoginAction | AuthenticateAction;
