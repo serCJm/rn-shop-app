@@ -32,7 +32,7 @@ export const fetchProducts = (): ThunkAction<
 				loadedProducts.push(
 					new Product(
 						key,
-						"u1",
+						respData[key].ownerId,
 						respData[key].title,
 						respData[key].imageUrl,
 						respData[key].description,
@@ -41,7 +41,13 @@ export const fetchProducts = (): ThunkAction<
 				);
 			}
 		}
-		return dispatch({ type: SET_PRODUCTS, products: loadedProducts, userProducts: loadedProducts.filter(prod => prod.ownerId === getState().auth.userId) });
+		return dispatch({
+			type: SET_PRODUCTS,
+			products: loadedProducts,
+			userProducts: loadedProducts.filter(
+				(prod) => prod.ownerId === getState().auth.userId
+			),
+		});
 	} catch (err) {
 		// send to custom analytics server
 		throw err;
