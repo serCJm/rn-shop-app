@@ -1,12 +1,13 @@
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../App";
-import { LOGIN, SIGNUP, SignUpActionTypes } from "../types";
+import { LOGIN, SIGNUP, AuthActionTypes } from "../types";
+// @ts-ignore
 import { FIREBASE_API } from "@env";
 
 export const signup = (
 	email: string,
 	password: string
-): ThunkAction<void, RootState, unknown, SignUpActionTypes> => {
+): ThunkAction<void, RootState, unknown, AuthActionTypes> => {
 	return async (dispatch) => {
 		try {
 			const response = await fetch(
@@ -34,7 +35,11 @@ export const signup = (
 				throw new Error(message);
 			}
 			const respData = await response.json();
-			return dispatch({ type: SIGNUP });
+			return dispatch({
+				type: SIGNUP,
+				token: respData.idToken,
+				userId: respData.localId,
+			});
 		} catch (e) {
 			throw new Error(e.message || "Something is wrong!");
 		}
@@ -44,7 +49,7 @@ export const signup = (
 export const login = (
 	email: string,
 	password: string
-): ThunkAction<void, RootState, unknown, SignUpActionTypes> => {
+): ThunkAction<void, RootState, unknown, AuthActionTypes> => {
 	return async (dispatch) => {
 		try {
 			const response = await fetch(
@@ -76,7 +81,11 @@ export const login = (
 				throw new Error(message);
 			}
 			const respData = await response.json();
-			return dispatch({ type: LOGIN });
+			return dispatch({
+				type: LOGIN,
+				token: respData.idToken,
+				userId: respData.localId,
+			});
 		} catch (e) {
 			throw new Error(e.message || "Something is wrong!");
 		}
