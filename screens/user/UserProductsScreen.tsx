@@ -1,5 +1,13 @@
 import React from "react";
-import { Button, FlatList, Platform, StyleSheet, Alert } from "react-native";
+import {
+	Button,
+	FlatList,
+	Platform,
+	StyleSheet,
+	Alert,
+	View,
+	Text,
+} from "react-native";
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -42,6 +50,21 @@ const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
 			},
 		]);
 	};
+
+	if (userProducts.length === 0) {
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<Text>No Products Found!</Text>
+			</View>
+		);
+	}
+
 	return (
 		<FlatList
 			data={userProducts}
