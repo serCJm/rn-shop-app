@@ -1,4 +1,4 @@
-import { AUTHENTICATE, AuthState, LOGIN, SIGNUP } from "../types";
+import { AUTHENTICATE, AuthState, LOGIN, LOGOUT, SIGNUP } from "../types";
 import { AuthActionTypes } from "../types";
 
 const initialState: AuthState = {
@@ -23,6 +23,8 @@ export default (state = initialState, action: AuthActionTypes) => {
 				token: action.token,
 				userId: action.userId,
 			};
+		case LOGOUT:
+			return initialState;
 		default:
 			return state;
 	}

@@ -1,6 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../App";
-import { LOGIN, SIGNUP, AuthActionTypes, AUTHENTICATE } from "../types";
+import { LOGIN, SIGNUP, AuthActionTypes, AUTHENTICATE, LOGOUT } from "../types";
 // @ts-ignore
 import { FIREBASE_API } from "@env";
 import { AsyncStorage } from "react-native";
@@ -114,6 +114,10 @@ export const login = (
 			throw new Error(e.message || "Something is wrong!");
 		}
 	};
+};
+
+export const logout = (): AuthActionTypes => {
+	return { type: LOGOUT };
 };
 
 const saveDataToStorage = (
