@@ -10,6 +10,7 @@ import { NavigationStackProp } from "react-navigation-stack";
 import { useDispatch } from "react-redux";
 import { Colors } from "../constants/Colots";
 import * as authActions from "../store/actions/auth";
+import { AUTHENTICATE } from "../store/types";
 
 interface Props {
 	navigation: NavigationStackProp;
@@ -31,8 +32,17 @@ const StartupScreen = (props: Props) => {
 				props.navigation.navigate("Auth");
 				return;
 			}
+			const expirationTime =
+				expirationDate.getTime() - new Date().getTime();
 			props.navigation.navigate("Shop");
-			dispatch(authActions.authenticate(userId, token));
+			dispatch(
+				authActions.authenticate(
+					AUTHENTICATE,
+					userId,
+					token,
+					expirationTime
+				)
+			);
 		};
 		tryLogin();
 	}, [dispatch]);

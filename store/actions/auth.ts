@@ -6,10 +6,15 @@ import { FIREBASE_API } from "@env";
 import { AsyncStorage } from "react-native";
 
 export const authenticate = (
+	type: "SIGNUP" | "LOGIN" | "AUTHENTICATE" | "LOGOUT",
 	userId: string,
-	token: string
-): AuthActionTypes => {
-	return { type: AUTHENTICATE, userId, token };
+	token: string,
+	expiaryTime: number
+): ThunkAction<void, RootState, unknown, AuthActionTypes> => {
+	return (dispatch) => {
+		dispatch(setLogoutTimer(expiaryTime));
+		dispatch({ type, userId, token });
+	};
 };
 
 export const signup = (
@@ -51,11 +56,14 @@ export const signup = (
 				respData.localId,
 				expirationDate
 			);
-			return dispatch({
-				type: SIGNUP,
-				token: respData.idToken,
-				userId: respData.localId,
-			});
+			return dispatch(
+				authenticate(
+					SIGNUP,
+					respData.idToken,
+					respData.localId,
+					+respData.expiresIn * 1000
+				)
+			);
 		} catch (e) {
 			throw new Error(e.message || "Something is wrong!");
 		}
@@ -105,11 +113,14 @@ export const login = (
 				respData.localId,
 				expirationDate
 			);
-			return dispatch({
-				type: LOGIN,
-				token: respData.idToken,
-				userId: respData.localId,
-			});
+			return dispatch(
+				authenticate(
+					LOGIN,
+					respData.idToken,
+					respData.localId,
+					+respData.expiresIn * 1000
+				)
+			);
 		} catch (e) {
 			throw new Error(e.message || "Something is wrong!");
 		}
@@ -117,7 +128,21 @@ export const login = (
 };
 
 export const logout = (): AuthActionTypes => {
+	clearLogoutTimer();
+	AsyncStorage.removeItem("userData");
 	return { type: LOGOUT };
+};
+
+let timer: NodeJS.Timeout;
+const setLogoutTimer = (
+	expirationTime: number
+): ThunkAction<void, RootState, unknown, AuthActionTypes> => {
+	return async (dispatch) => {
+		timer = setTimeout(() => dispatch(logout()), expirationTime / 1000);
+	};
+};
+const clearLogoutTimer = () => {
+	if (timer) clearTimeout(timer);
 };
 
 const saveDataToStorage = (
