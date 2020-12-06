@@ -138,7 +138,7 @@ const setLogoutTimer = (
 	expirationTime: number
 ): ThunkAction<void, RootState, unknown, AuthActionTypes> => {
 	return async (dispatch) => {
-		timer = setTimeout(() => dispatch(logout()), expirationTime / 1000);
+		timer = setTimeout(() => dispatch(logout()), expirationTime);
 	};
 };
 const clearLogoutTimer = () => {

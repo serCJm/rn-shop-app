@@ -4,6 +4,7 @@ import { createDrawerNavigator, DrawerItems } from "react-navigation-drawer";
 import {
 	createAppContainer,
 	createSwitchNavigator,
+	NavigationContainerComponent,
 	SafeAreaView,
 } from "react-navigation";
 import { Button, Platform, View } from "react-native";
@@ -20,6 +21,7 @@ import AuthScreen from "../screens/user/AuthScreen";
 import StartupScreen from "../screens/StartupScreen";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
+import NavigationContainer from "./NavigationContainer";
 
 const defaultNavigationOptions = {
 	headerStyle: {
@@ -116,7 +118,7 @@ const ShopNavigator = createDrawerNavigator(
 							color={Colors.PRIMARY}
 							onPress={() => {
 								dispatch(authActions.logout());
-								props.navigation.navigate("Auth");
+								// props.navigation.navigate("Auth");
 							}}
 						></Button>
 					</SafeAreaView>
@@ -141,4 +143,12 @@ const MainNavigator = createSwitchNavigator({
 	Shop: ShopNavigator,
 });
 
-export default createAppContainer(MainNavigator);
+type NavContainerParams = {};
+
+type NavContainerProps = {
+	ref: React.RefObject<NavigationContainerComponent> | null;
+};
+
+export default createAppContainer<NavContainerParams, NavContainerProps>(
+	MainNavigator
+);
