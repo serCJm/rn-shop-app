@@ -10,7 +10,7 @@ import cartReducer from "./store/reducers/cart";
 import ordersReducer from "./store/reducers/orders";
 import authReducer from "./store/reducers/auth";
 import ShopNavigator from "./navigation/ShopNavigator";
-import NavigationContainer from "./navigation/NavigationContainer";
+import AppNavigator from "./navigation/AppNavigator";
 
 const rootReducer = combineReducers({
 	products: productsReducer,
@@ -20,6 +20,12 @@ const rootReducer = combineReducers({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
+
+export type RootStackParamList = {
+	ProductsOverview: undefined;
+	ProductDetail: { productId: string; productTitle: string };
+	Cart: undefined;
+};
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
@@ -42,7 +48,7 @@ export default function App() {
 		);
 	return (
 		<Provider store={store}>
-			<NavigationContainer></NavigationContainer>
+			<AppNavigator></AppNavigator>
 		</Provider>
 	);
 }
