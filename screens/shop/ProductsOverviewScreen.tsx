@@ -1,9 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-	NavigationStackProp,
-	NavigationStackScreenProps,
-} from "react-navigation-stack";
-import {
 	View,
 	ActivityIndicator,
 	Button,
@@ -14,25 +10,24 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 
-import { RootState } from "../../App";
+import { RootStackParamList, RootState } from "../../App";
 import ProductItem from "../../components/shop/ProductItem";
 import * as cartActions from "../../store/actions/cart";
 import * as productActions from "../../store/actions/products";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
-import { NavigationDrawerScreenProps } from "react-navigation-drawer";
-import { NavigationScreenComponent } from "react-navigation";
 import { Colors } from "../../constants/Colots";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { DrawerNavigationProp } from "@react-navigation/drawer";
 
 interface Props {
-	navigation: NavigationStackProp;
+	navigation: StackNavigationProp<RootStackParamList, "ProductsOverview"> &
+		DrawerNavigationProp<RootStackParamList, "ProductsOverview">;
 }
 type Params = {};
 type ScreenProps = {};
 
-const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
-	props: Props
-) => {
+const ProductsOverviewScreen = (props: Props) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -55,12 +50,10 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 
 	useEffect(() => {
 		const willFocusSub = props.navigation.addListener(
-			"willFocus",
+			"focus",
 			loadProducts
 		);
-		return () => {
-			willFocusSub.remove();
-		};
+		return willFocusSub;
 	}, [loadProducts]);
 
 	useEffect(() => {
@@ -149,9 +142,7 @@ const ProductsOverviewScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	);
 };
 
-type navOptions = NavigationStackScreenProps & NavigationDrawerScreenProps;
-
-ProductsOverviewScreen.navigationOptions = (navData: navOptions) => {
+export const productsOverviewScreenOptions = (navData: Props) => {
 	return {
 		headerTitle: "All Products",
 		headerLeft: () => (
