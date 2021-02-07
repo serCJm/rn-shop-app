@@ -23,8 +23,18 @@ export type RootState = ReturnType<typeof rootReducer>;
 
 export type RootStackParamList = {
 	ProductsOverview: undefined;
-	ProductDetail: { productId: string; productTitle: string };
+	ProductDetail:
+		| {
+				productId: string;
+				productTitle: string;
+		  }
+		| undefined;
 	Cart: undefined;
+	Orders: undefined;
+	UserProducts: undefined;
+	EditProduct:
+		| { productId: string; submit?: () => void | undefined }
+		| undefined;
 };
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
