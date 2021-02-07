@@ -35,6 +35,8 @@ export type RootStackParamList = {
 	EditProduct:
 		| { productId: string; submit?: () => void | undefined }
 		| undefined;
+	Products: undefined;
+	Admin: undefined;
 };
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
