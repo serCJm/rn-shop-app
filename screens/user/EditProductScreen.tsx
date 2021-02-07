@@ -1,3 +1,6 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
 	ScrollView,
@@ -8,25 +11,20 @@ import {
 	View,
 	ActivityIndicator,
 } from "react-native";
-import { NavigationScreenComponent } from "react-navigation";
-import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import {
-	NavigationStackProp,
-	NavigationStackScreenProps,
-} from "react-navigation-stack";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../App";
+import { RootStackParamList, RootState } from "../../App";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import Input from "../../components/UI/Input";
 import { Colors } from "../../constants/Colots";
 import * as productActions from "../../store/actions/products";
+import { CommonActions } from "@react-navigation/native";
 
 interface Props {
-	navigation: NavigationStackProp;
+	navigation: StackNavigationProp<RootStackParamList, "EditProduct"> &
+		DrawerNavigationProp<RootStackParamList, "EditProduct">;
+	route: RouteProp<RootStackParamList, "EditProduct">;
 }
-type Params = {};
-type ScreenProps = {};
 
 export enum InputUpdateIds {
 	title = "title",
@@ -90,12 +88,10 @@ const formReducer = (
 	return state;
 };
 
-const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
-	props: Props
-) => {
+const EditProductScreen = (props: Props) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState();
-	const prodId = props.navigation.getParam("productId");
+	const prodId = props.route.params?.productId;
 
 	const editedProduct = useSelector((state: RootState) =>
 		state.products.userProducts.find((prod) => prod.id === prodId)
@@ -135,7 +131,7 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 		const { title, description, imageUrl, price } = formState.inputValues;
 		setIsLoading(true);
 		try {
-			if (editedProduct) {
+			if (editedProduct && prodId) {
 				await dispatch(
 					productActions.updateProduct(
 						prodId,
@@ -162,7 +158,9 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	}, [dispatch, prodId, formState]);
 
 	useEffect(() => {
-		props.navigation.setParams({ submit: submitHandler });
+		props.navigation.dispatch(
+			CommonActions.setParams({ submit: submitHandler })
+		);
 	}, [submitHandler]);
 
 	const inputChangeHandler = useCallback(
@@ -261,12 +259,10 @@ const EditProductScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	);
 };
 
-type navOptions = NavigationStackScreenProps & NavigationDrawerScreenProps;
-
-EditProductScreen.navigationOptions = (navData: navOptions) => {
-	const submitFn = navData.navigation.getParam("submit");
+export const editProductScreenOptions = (navData: Props) => {
+	const submitFn = navData.route.params?.submit;
 	return {
-		headerTitle: navData.navigation.getParam("productId")
+		headerTitle: navData.route.params?.productId
 			? "Edit Product"
 			: "Add Product",
 		headerLeft: () => (

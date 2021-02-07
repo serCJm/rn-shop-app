@@ -94,7 +94,7 @@ const CartScreen = (props: Props) => {
 	);
 };
 
-CartScreen.navigationOptions = {
+export const cartScreenOptions = {
 	headerTitle: "Your Orders",
 };
 

@@ -1,30 +1,29 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
 	FlatList,
 	Platform,
-	StyleSheet,
 	Text,
 	View,
 } from "react-native";
-import { NavigationScreenComponent } from "react-navigation";
-import { NavigationDrawerScreenProps } from "react-navigation-drawer";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { NavigationStackScreenProps } from "react-navigation-stack";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../App";
+import { RootStackParamList, RootState } from "../../App";
 import OrderItem from "../../components/shop/OrderItem";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import { Colors } from "../../constants/Colots";
 import * as orderActions from "../../store/actions/orders";
 
-interface Props {}
-type Params = {};
-type ScreenProps = {};
+interface Props {
+	navigation: StackNavigationProp<RootStackParamList, "Orders"> &
+		DrawerNavigationProp<RootStackParamList, "Orders">;
+	route: RouteProp<RootStackParamList, "Orders">;
+}
 
-const OrdersScreen: NavigationScreenComponent<Params, ScreenProps> = (
-	props: Props
-) => {
+const OrdersScreen = (props: Props) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const dispatch = useDispatch();
@@ -78,9 +77,7 @@ const OrdersScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	);
 };
 
-type navOptions = NavigationStackScreenProps & NavigationDrawerScreenProps;
-
-OrdersScreen.navigationOptions = (navData: navOptions) => {
+export const ordersScreenOptions = (navData: Props) => {
 	return {
 		headerTitle: "Your Orders",
 		headerLeft: () => (
@@ -98,5 +95,3 @@ OrdersScreen.navigationOptions = (navData: navOptions) => {
 };
 
 export default OrdersScreen;
-
-const styles = StyleSheet.create({});

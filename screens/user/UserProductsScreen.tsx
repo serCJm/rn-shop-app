@@ -1,36 +1,21 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import {
-	Button,
-	FlatList,
-	Platform,
-	StyleSheet,
-	Alert,
-	View,
-	Text,
-} from "react-native";
-import { NavigationScreenComponent } from "react-navigation";
-import { NavigationDrawerScreenProps } from "react-navigation-drawer";
+import { Button, FlatList, Platform, Alert, View, Text } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import {
-	NavigationStackProp,
-	NavigationStackScreenProps,
-} from "react-navigation-stack";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../App";
+import { RootStackParamList, RootState } from "../../App";
 import ProductItem from "../../components/shop/ProductItem";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import { Colors } from "../../constants/Colots";
 import * as productActions from "../../store/actions/products";
 
 interface Props {
-	navigation: NavigationStackProp;
+	navigation: StackNavigationProp<RootStackParamList, "UserProducts"> &
+		DrawerNavigationProp<RootStackParamList, "UserProducts">;
 }
-type Params = {};
-type ScreenProps = {};
 
-const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
-	props: Props
-) => {
+const UserProductsScreen = (props: Props) => {
 	const userProducts = useSelector(
 		(state: RootState) => state.products.userProducts
 	);
@@ -92,9 +77,7 @@ const UserProductsScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	);
 };
 
-type navOptions = NavigationStackScreenProps & NavigationDrawerScreenProps;
-
-UserProductsScreen.navigationOptions = (navData: navOptions) => {
+export const userProductsScreenOptions = (navData: Props) => {
 	return {
 		headerTitle: "Your Products",
 		headerLeft: () => (
@@ -123,5 +106,3 @@ UserProductsScreen.navigationOptions = (navData: navOptions) => {
 };
 
 export default UserProductsScreen;
-
-const styles = StyleSheet.create({});
