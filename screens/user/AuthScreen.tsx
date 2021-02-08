@@ -1,3 +1,5 @@
+import { DrawerNavigationProp } from "@react-navigation/drawer";
+import { StackNavigationProp } from "@react-navigation/stack";
 import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useReducer, useState, useEffect } from "react";
 import {
@@ -9,19 +11,17 @@ import {
 	StyleSheet,
 	View,
 } from "react-native";
-import { NavigationScreenComponent } from "react-navigation";
-import { NavigationStackProp } from "react-navigation-stack";
 import { useDispatch } from "react-redux";
+import { RootStackParamList } from "../../App";
 import Card from "../../components/UI/Card";
 import Input from "../../components/UI/Input";
 import { Colors } from "../../constants/Colots";
 import * as authActions from "../../store/actions/auth";
 
 interface Props {
-	navigation: NavigationStackProp;
+	navigation: StackNavigationProp<RootStackParamList, "Auth"> &
+		DrawerNavigationProp<RootStackParamList, "Auth">;
 }
-type Params = {};
-type ScreenProps = {};
 
 enum FormReducerActions {
 	REDUCER_UPDATE = "UPDATE",
@@ -74,9 +74,7 @@ const formReducer = (
 	return state;
 };
 
-const AuthScreen: NavigationScreenComponent<Params, ScreenProps> = (
-	props: Props
-) => {
+const AuthScreen = (props: Props) => {
 	const [loading, setIsLoading] = useState(false);
 	const [error, setError] = useState();
 	const [isSignUp, setIsSignUp] = useState(false);
@@ -212,7 +210,7 @@ const AuthScreen: NavigationScreenComponent<Params, ScreenProps> = (
 	);
 };
 
-AuthScreen.navigationOptions = {
+export const authScreenOptions = {
 	headerTitle: "Login",
 };
 

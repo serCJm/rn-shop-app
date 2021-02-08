@@ -6,15 +6,12 @@ import {
 	Text,
 	View,
 } from "react-native";
-import { NavigationStackProp } from "react-navigation-stack";
 import { useDispatch } from "react-redux";
 import { Colors } from "../constants/Colots";
 import * as authActions from "../store/actions/auth";
 import { AUTHENTICATE } from "../store/types";
 
-interface Props {
-	navigation: NavigationStackProp;
-}
+interface Props {}
 
 const StartupScreen = (props: Props) => {
 	const dispatch = useDispatch();
@@ -22,19 +19,22 @@ const StartupScreen = (props: Props) => {
 		const tryLogin = async () => {
 			const userData = await AsyncStorage.getItem("userData");
 			if (!userData) {
-				props.navigation.navigate("Auth");
+				// props.navigation.navigate("Auth");
+				dispatch(authActions.setDidTryAL());
 				return;
 			}
 			const transformedData = JSON.parse(userData);
 			const { token, userId, expiryDate } = transformedData;
 			const expirationDate = new Date(expiryDate);
 			if (expirationDate <= new Date() || !token || !userId) {
-				props.navigation.navigate("Auth");
+				// props.navigation.navigate("Auth");
+				dispatch(authActions.setDidTryAL());
 				return;
 			}
 			const expirationTime =
 				expirationDate.getTime() - new Date().getTime();
-			props.navigation.navigate("Shop");
+			// props.navigation.navigate("Shop");
+
 			dispatch(
 				authActions.authenticate(
 					AUTHENTICATE,

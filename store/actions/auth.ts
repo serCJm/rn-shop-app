@@ -1,6 +1,13 @@
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../App";
-import { LOGIN, SIGNUP, AuthActionTypes, AUTHENTICATE, LOGOUT } from "../types";
+import {
+	LOGIN,
+	SIGNUP,
+	AuthActionTypes,
+	AUTHENTICATE,
+	LOGOUT,
+	SET_DID_TRY_AL,
+} from "../types";
 // @ts-ignore
 import { FIREBASE_API } from "@env";
 import { AsyncStorage } from "react-native";
@@ -158,4 +165,8 @@ const saveDataToStorage = (
 			expiryDate: expirationDate.toISOString(),
 		})
 	);
+};
+
+export const setDidTryAL = () => {
+	return { type: SET_DID_TRY_AL };
 };

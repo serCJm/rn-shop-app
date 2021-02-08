@@ -9,7 +9,6 @@ import productsReducer from "./store/reducers/products";
 import cartReducer from "./store/reducers/cart";
 import ordersReducer from "./store/reducers/orders";
 import authReducer from "./store/reducers/auth";
-import ShopNavigator from "./navigation/ShopNavigator";
 import AppNavigator from "./navigation/AppNavigator";
 
 const rootReducer = combineReducers({
@@ -37,6 +36,8 @@ export type RootStackParamList = {
 		| undefined;
 	Products: undefined;
 	Admin: undefined;
+	Auth: undefined;
+	Shop: undefined;
 };
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

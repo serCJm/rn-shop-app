@@ -25,8 +25,7 @@ import UserProductsScreen, {
 import EditProductScreen, {
 	editProductScreenOptions,
 } from "../screens/user/EditProductScreen";
-import AuthScreen from "../screens/user/AuthScreen";
-import StartupScreen from "../screens/StartupScreen";
+import AuthScreen, { authScreenOptions } from "../screens/user/AuthScreen";
 import { useDispatch } from "react-redux";
 import * as authActions from "../store/actions/auth";
 import { RootStackParamList } from "../App";
@@ -46,7 +45,7 @@ const defaultNavigationOptions = {
 
 const ProductsStackNavigator = createStackNavigator<RootStackParamList>();
 
-export const ProductsNavigator = () => {
+const ProductsNavigator = () => {
 	return (
 		<ProductsStackNavigator.Navigator
 			screenOptions={defaultNavigationOptions}
@@ -92,7 +91,7 @@ export const ProductsNavigator = () => {
 
 const OrdersStackNavigator = createStackNavigator<RootStackParamList>();
 
-export const OrdersNavigator = () => (
+const OrdersNavigator = () => (
 	<OrdersStackNavigator.Navigator screenOptions={defaultNavigationOptions}>
 		<OrdersStackNavigator.Screen
 			name="Orders"
@@ -121,8 +120,7 @@ export const OrdersNavigator = () => (
 // );
 
 const AdminStackNavigator = createStackNavigator<RootStackParamList>();
-
-export const AdminNavigator = () => (
+const AdminNavigator = () => (
 	<AdminStackNavigator.Navigator screenOptions={defaultNavigationOptions}>
 		<AdminStackNavigator.Screen
 			name="UserProducts"
@@ -160,7 +158,7 @@ export const AdminNavigator = () => (
 
 const ShopDrawerNavigator = createDrawerNavigator<RootStackParamList>();
 
-const ShopNavigator = (
+export const ShopNavigator = () => (
 	<ShopDrawerNavigator.Navigator
 		drawerContent={(props) => {
 			const dispatch = useDispatch();
@@ -270,27 +268,41 @@ const ShopNavigator = (
 // 	}
 // );
 
-const AuthNavigator = createStackNavigator(
-	{
-		Auth: AuthScreen,
-	},
-	{
-		defaultNavigationOptions,
-	}
-);
+const AuthStackNavigator = createStackNavigator<RootStackParamList>();
 
-const MainNavigator = createSwitchNavigator({
-	Startup: StartupScreen,
-	Auth: AuthNavigator,
-	Shop: ShopNavigator,
-});
-
-type NavContainerParams = {};
-
-type NavContainerProps = {
-	ref: React.RefObject<NavigationContainerComponent> | null;
+export const AuthNavigator = () => {
+	return (
+		<AuthStackNavigator.Navigator screenOptions={defaultNavigationOptions}>
+			<AuthStackNavigator.Screen
+				name="Auth"
+				component={AuthScreen}
+				options={authScreenOptions}
+			></AuthStackNavigator.Screen>
+		</AuthStackNavigator.Navigator>
+	);
 };
 
-export default createAppContainer<NavContainerParams, NavContainerProps>(
-	MainNavigator
-);
+// const AuthNavigator = createStackNavigator(
+// 	{
+// 		Auth: AuthScreen,
+// 	},
+// 	{
+// 		defaultNavigationOptions,
+// 	}
+// );
+
+// const MainNavigator = createSwitchNavigator({
+// 	Startup: StartupScreen,
+// 	Auth: AuthNavigator,
+// 	Shop: ShopNavigator,
+// });
+
+// type NavContainerParams = {};
+
+// type NavContainerProps = {
+// 	ref: React.RefObject<NavigationContainerComponent> | null;
+// };
+
+// export default createAppContainer<NavContainerParams, NavContainerProps>(
+// 	MainNavigator
+// );
