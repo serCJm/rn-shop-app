@@ -124,7 +124,7 @@ export const SET_DID_TRY_AL = "SET_DID_TRY_AL";
 export interface AuthState {
 	token: string;
 	userId: string;
-	didTryAutoLogin: boolean;
+	didTryAutoLogin?: boolean;
 }
 
 interface AuthenticateAction {
