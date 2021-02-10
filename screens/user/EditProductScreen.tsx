@@ -158,9 +158,21 @@ const EditProductScreen = (props: Props) => {
 	}, [dispatch, prodId, formState]);
 
 	useEffect(() => {
-		props.navigation.dispatch(
-			CommonActions.setParams({ submit: submitHandler })
-		);
+		props.navigation.setOptions({
+			headerRight: () => (
+				<HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+					<Item
+						title="Save"
+						iconName={
+							Platform.OS === "android"
+								? "md-checkmark"
+								: "ios-checkmark"
+						}
+						onPress={submitHandler}
+					></Item>
+				</HeaderButtons>
+			),
+		});
 	}, [submitHandler]);
 
 	const inputChangeHandler = useCallback(
@@ -260,7 +272,6 @@ const EditProductScreen = (props: Props) => {
 };
 
 export const editProductScreenOptions = (navData: Props) => {
-	const submitFn = navData.route.params?.submit;
 	return {
 		headerTitle: navData.route.params?.productId
 			? "Edit Product"
@@ -273,19 +284,6 @@ export const editProductScreenOptions = (navData: Props) => {
 						Platform.OS === "android" ? "md-menu" : "ios-cart"
 					}
 					onPress={() => navData.navigation.toggleDrawer()}
-				></Item>
-			</HeaderButtons>
-		),
-		headerRight: () => (
-			<HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-				<Item
-					title="Save"
-					iconName={
-						Platform.OS === "android"
-							? "md-checkmark"
-							: "ios-checkmark"
-					}
-					onPress={submitFn}
 				></Item>
 			</HeaderButtons>
 		),
