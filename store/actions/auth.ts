@@ -4,7 +4,6 @@ import {
 	LOGIN,
 	SIGNUP,
 	AuthActionTypes,
-	AUTHENTICATE,
 	LOGOUT,
 	SET_DID_TRY_AL,
 } from "../types";
@@ -14,8 +13,8 @@ import { AsyncStorage } from "react-native";
 
 export const authenticate = (
 	type: "SIGNUP" | "LOGIN" | "AUTHENTICATE" | "LOGOUT",
-	userId: string,
 	token: string,
+	userId: string,
 	expiaryTime: number
 ): ThunkAction<void, RootState, unknown, AuthActionTypes> => {
 	return (dispatch) => {
