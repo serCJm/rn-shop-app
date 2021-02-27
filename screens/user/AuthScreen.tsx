@@ -98,9 +98,15 @@ const AuthScreen = (props: Props) => {
 	}, [error]);
 
 	const authHandler = async () => {
+		if (!formState.formIsValid) {
+			return Alert.alert("Invalid Email or Password!", error, [
+				{ text: "Okay" },
+			]);
+		}
 		let action;
 		setError(undefined);
 		setIsLoading(true);
+
 		if (isSignUp) {
 			action = authActions.signup(
 				formState.inputValues.email,
