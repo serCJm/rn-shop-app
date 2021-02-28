@@ -72,7 +72,7 @@ export const addOrder = (
 		}
 		const respData = await resp.json();
 
-		return dispatch({
+		dispatch({
 			type: ADD_ORDER,
 			orderData: {
 				id: respData.name,
@@ -80,6 +80,24 @@ export const addOrder = (
 				amount: totalAmount,
 				date,
 			},
+		});
+
+		cartItems.forEach((cartItem) => {
+			const { productPushToken } = cartItem;
+
+			fetch("https://exp.host/--/api/v2/push/send", {
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					"Accept-Encoding": "gzip, deflate",
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					to: productPushToken,
+					title: "Order was placed!",
+					body: cartItem.productTitle,
+				}),
+			});
 		});
 	} catch (err) {
 		// send to custom analytics server
