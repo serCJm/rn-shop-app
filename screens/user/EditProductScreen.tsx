@@ -18,7 +18,6 @@ import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import Input from "../../components/UI/Input";
 import { Colors } from "../../constants/Colots";
 import * as productActions from "../../store/actions/products";
-import { CommonActions } from "@react-navigation/native";
 
 interface Props {
 	navigation: StackNavigationProp<RootStackParamList, "EditProduct"> &
@@ -117,7 +116,7 @@ const EditProductScreen = (props: Props) => {
 
 	useEffect(() => {
 		if (error) {
-			Alert.alert("An error occured!", error, [{ text: "OK" }]);
+			Alert.alert("An error occurred!", error, [{ text: "OK" }]);
 		}
 	}, [error]);
 
