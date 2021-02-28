@@ -113,7 +113,6 @@ export const createProduct = (
 					return;
 				}
 				pushToken = (await Notifications.getExpoPushTokenAsync()).data;
-				console.log(pushToken);
 			} else {
 				alert("Must use physical device for Push Notifications");
 			}
