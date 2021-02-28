@@ -1,4 +1,5 @@
 import { Action } from "redux";
+import Constants from "expo-constants";
 import { ThunkAction } from "redux-thunk";
 import { RootState } from "../../App";
 import Product from "../../models/product";
@@ -9,6 +10,8 @@ import {
 	SET_PRODUCTS,
 	UPDATE_PRODUCT,
 } from "../types";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
 
 export const fetchProducts = (): ThunkAction<
 	void,
@@ -67,7 +70,7 @@ export const deleteProduct = (
 					method: "DELETE",
 				}
 			);
-			console.log(resp);
+
 			if (resp.ok) {
 				return dispatch({
 					type: DELETE_PRODUCT,
@@ -91,6 +94,27 @@ export const createProduct = (
 	return async (dispatch, getState) => {
 		let respData;
 		try {
+			let pushToken;
+			if (Constants.isDevice) {
+				const {
+					status: existingStatus,
+				} = await Notifications.getPermissionsAsync();
+				let finalStatus = existingStatus;
+				if (existingStatus !== "granted") {
+					const {
+						status,
+					} = await Notifications.requestPermissionsAsync();
+					finalStatus = status;
+				}
+				if (finalStatus !== "granted") {
+					alert("Failed to get push token for push notification!");
+					return;
+				}
+				pushToken = (await Notifications.getExpoPushTokenAsync()).data;
+				console.log(pushToken);
+			} else {
+				alert("Must use physical device for Push Notifications");
+			}
 			const resp = await fetch(
 				`https://rn-shop-app-57f83.firebaseio.com/products.json?auth=${
 					getState().auth.token
@@ -106,6 +130,7 @@ export const createProduct = (
 						imageUrl,
 						price,
 						ownerId: getState().auth.userId,
+						ownerPushToken: pushToken,
 					}),
 				}
 			);
@@ -114,7 +139,7 @@ export const createProduct = (
 			console.log(e);
 		}
 
-		if (respData)
+		if (!respData.error) {
 			dispatch({
 				type: CREATE_PRODUCT,
 				productData: {
@@ -126,6 +151,9 @@ export const createProduct = (
 					ownerId: getState().auth.userId,
 				},
 			});
+		} else {
+			console.log(respData);
+		}
 	};
 };
 

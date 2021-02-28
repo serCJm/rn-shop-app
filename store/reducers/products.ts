@@ -1,5 +1,3 @@
-import { ActionSheetIOS } from "react-native";
-import PRODUCTS from "../../data/dummy-data";
 import Product from "../../models/product";
 import {
 	CREATE_PRODUCT,
