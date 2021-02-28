@@ -6,7 +6,6 @@ import {
 	TextInputProps,
 	View,
 } from "react-native";
-import { InputUpdateIds } from "../../screens/user/EditProductScreen";
 
 interface Props extends TextInputProps {
 	id: string;
@@ -58,6 +57,7 @@ const inputReducer = (
 				...state,
 				value: action.value,
 				isValid: action.isValid,
+				touched: true,
 			};
 		case ActionTypesEnum.inputBlur:
 			return {
