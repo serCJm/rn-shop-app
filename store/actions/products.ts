@@ -36,6 +36,7 @@ export const fetchProducts = (): ThunkAction<
 					new Product(
 						key,
 						respData[key].ownerId,
+						respData[key].ownerPushToken,
 						respData[key].title,
 						respData[key].imageUrl,
 						respData[key].description,
@@ -93,8 +94,9 @@ export const createProduct = (
 ): ThunkAction<void, RootState, unknown, ProductsActionTypes> => {
 	return async (dispatch, getState) => {
 		let respData;
+		let pushToken;
+
 		try {
-			let pushToken;
 			if (Constants.isDevice) {
 				const {
 					status: existingStatus,
@@ -130,7 +132,7 @@ export const createProduct = (
 						imageUrl,
 						price,
 						ownerId: getState().auth.userId,
-						ownerPushToken: pushToken,
+						pushToken,
 					}),
 				}
 			);
@@ -139,7 +141,7 @@ export const createProduct = (
 			console.log(e);
 		}
 
-		if (!respData.error) {
+		if (!respData.error && pushToken) {
 			dispatch({
 				type: CREATE_PRODUCT,
 				productData: {
@@ -149,6 +151,7 @@ export const createProduct = (
 					imageUrl,
 					price,
 					ownerId: getState().auth.userId,
+					pushToken,
 				},
 			});
 		} else {
