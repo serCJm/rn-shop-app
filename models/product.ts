@@ -2,6 +2,7 @@ export default class Product {
 	constructor(
 		public id: string,
 		public ownerId: string,
+		public pushToken: string,
 		public title: string,
 		public imageUrl: string,
 		public description: string,
@@ -9,6 +10,7 @@ export default class Product {
 	) {
 		this.id = id;
 		this.ownerId = ownerId;
+		this.pushToken = pushToken;
 		this.title = title;
 		this.imageUrl = imageUrl;
 		this.description = description;

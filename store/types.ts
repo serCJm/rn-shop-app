@@ -34,6 +34,7 @@ interface CreateProductAction {
 		imageUrl: string;
 		price: number;
 		ownerId: string;
+		pushToken: string;
 	};
 }
 
@@ -67,6 +68,7 @@ export type OrderItems = {
 	productTitle: string;
 	productPrice: number;
 	quantity: number;
+	productPushToken: string;
 	sum: number;
 };
 
